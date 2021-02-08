@@ -6,9 +6,15 @@ import { Directive, ElementRef, HostBinding, HostListener, OnInit, Renderer2 } f
 export class DropdownDirective {
   @HostBinding('class.open') isOpen: boolean = false;
 
-  constructor() { }
+  constructor(private elementRef: ElementRef) { }
 
-  @HostListener('click') toggleOpen(eventData: Event) {
-    this.isOpen = !this.isOpen;
+  //click anywhere in document to close
+  @HostListener('document:click', ['$event']) toggleOpen(event: Event) {
+    this.isOpen = this.elementRef.nativeElement.contains(event.target) ? !this.isOpen : false;
   }
+
+  //click exactly on button to close
+  // @HostListener('click') toggleOpen(eventData: Event) {
+  //   this.isOpen = !this.isOpen;
+  // }
 }
