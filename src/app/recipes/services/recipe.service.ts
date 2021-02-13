@@ -4,7 +4,9 @@ import { Ingredient } from 'src/app/shared/ingredient.model';
 import { ShoppingListService } from 'src/app/shopping-list/services/shopping-list.service';
 import { Recipe } from '../recipe.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RecipeService {
   private recipes: Recipe[] = [
     new Recipe(1, 'A test Recipe',
