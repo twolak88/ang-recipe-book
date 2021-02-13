@@ -36,7 +36,11 @@
             type="submit"
             [disabled]="!formEl.valid"
           >{{ editMode ? 'Update' : 'Add' }}</button>
-          <button class="btn btn-danger" type="button">Detele</button>
+          <button
+            class="btn btn-danger"
+            type="button"
+            (click)="onDelete()"
+            [disabled]="!editMode">Detele</button>
           <button
             class="btn btn-warning"
             type="button"
