@@ -5,7 +5,8 @@
         <div class="col-xs-12">
           <button
             type="submit"
-            class="btn btn-success">Save</button>
+            class="btn btn-success"
+            [disabled]="!recipeForm.valid">Save</button>
           <button
             type="button"
             class="btn btn-danger">Cancel</button>
@@ -20,6 +21,11 @@
               id="name"
               formControlName="name"
               class="form-control"/>
+            <span
+              class="help-block alert-danger"
+              *ngIf="!recipeForm.get('name').valid && recipeForm.get('name').touched">
+              <span *ngIf="recipeForm.hasError('required', 'name')">Recipe name is required!</span>
+            </span>
           </div>
         </div>
       </div>
@@ -32,6 +38,11 @@
               id="imagePath"
               formControlName="imagePath"
               class="form-control"/>
+            <span
+              class="help-block alert-danger"
+              *ngIf="!recipeForm.get('imagePath').valid && recipeForm.get('imagePath').touched">
+              <span *ngIf="recipeForm.hasError('required', 'imagePath')">Recipe URL is required!</span>
+            </span>
           </div>
         </div>
       </div>
@@ -54,6 +65,11 @@
               class="form-control"
               rows="6">
             </textarea>
+            <span
+              class="help-block alert-danger"
+              *ngIf="!recipeForm.get('description').valid && recipeForm.get('description').touched">
+              <span *ngIf="recipeForm.hasError('required', 'description')">Recipe description is required!</span>
+            </span>
           </div>
         </div>
       </div>
@@ -75,6 +91,11 @@
                 type="text"
                 formControlName="name"
                 class="form-control"/>
+              <span
+                class="help-block alert-danger"
+                *ngIf="!ingredientControl.get('name').valid && ingredientControl.get('name').touched">
+                <span *ngIf="ingredientControl.hasError('required', 'name')">Ingredient name is required!</span>
+              </span>
             </div>
             <div class="col-xs-2">
               <!-- <label for="imagePath">Amount</label> -->
@@ -82,6 +103,12 @@
                 type="number"
                 formControlName="amount"
                 class="form-control"/>
+              <span
+                class="help-block alert-danger"
+                *ngIf="!ingredientControl.get('amount').valid && ingredientControl.get('amount').touched">
+                <span *ngIf="ingredientControl.hasError('required', 'amount')">Ingredient amount is required!</span>
+                <span *ngIf="ingredientControl.hasError('pattern', 'amount')">Ingredient amount must be greter than 0!</span>
+              </span>
             </div>
             <div class="col-xs-2">
               <button class="btn btn-danger">X</button>
