@@ -40,23 +40,35 @@ export class RecipeService {
     return this.recipes.slice();
   }
 
-  addRecipe(recipe: Recipe) {
+  addRecipe(recipe: Recipe): number {
     recipe.id = this.recipes.length+1;
     this.recipes.push(recipe);
     this.recipeChanged.next(this.getRecipes());
+    return recipe.id;
   }
 
   updateRecipe(id: number, recipe: Recipe) {
-    const index = this.recipes.findIndex(
-      (iterRecipe) => {
-        return iterRecipe.id === id;
-      });
+    const index = this.findRecipeIndex(id);
     recipe.id = id;
     this.recipes[index] = recipe;
     this.recipeChanged.next(this.getRecipes());
   }
 
+  deleteRecipe(id:number) {
+    const index = this.findRecipeIndex(id);
+    this.recipes.splice(index, 1);
+    this.recipeChanged.next(this.getRecipes());
+  }
+
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
     this.shoppingListService.addIngredients(ingredients);
+  }
+
+  private findRecipeIndex(id: number): number {
+    const index = this.recipes.findIndex(
+      (iterRecipe) => {
+        return iterRecipe.id === id;
+      });
+    return index;
   }
 }
