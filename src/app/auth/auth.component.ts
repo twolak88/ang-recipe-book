@@ -10,6 +10,8 @@ import { AuthService } from './services/auth.service';
 export class AuthComponent implements OnInit {
   @ViewChild('authForm') authForm: NgForm;
   isLoginMode = true;
+  isLoading = false;
+  error = null;
 
   constructor(private authService: AuthService) { }
 
@@ -20,6 +22,7 @@ export class AuthComponent implements OnInit {
     if (!this.authForm.valid) {
       return;
     }
+    this.isLoading = true;
     const email = this.authForm.value.email;
     const password = this.authForm.value.password;
 
@@ -29,8 +32,11 @@ export class AuthComponent implements OnInit {
       this.authService.signup(email, password).subscribe(
         responseData => {
           console.log(responseData);
-        }, error => {
-          console.log(error);
+          this.isLoading = false;
+        }, errorMessage => {
+          console.log(errorMessage);
+          this.error = errorMessage;
+          this.isLoading = false;
         }
       );
     }
