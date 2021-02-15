@@ -19,10 +19,11 @@
         <button
           type="submit"
           class="btn btn-primary"
-          style="margin-right: 10px;">Sign up</button>
+          style="margin-right: 10px;">{{ isLoginMode ? 'Login' : 'Sign Up'}}</button>
         <button
-          type="submit"
-          class="btn btn-primary">Switch to Login</button>
+          type="button"
+          class="btn btn-primary"
+          (click)="onSwitchMode()">Switch to {{ isLoginMode ? 'Sign Up': 'Login' }}</button>
       </div>
     </form>
   </div>
