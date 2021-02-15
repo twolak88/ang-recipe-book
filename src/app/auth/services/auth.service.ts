@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 interface AuthResponseData {
+  kind: string;
   idToken: string;
   email: string;
   refreshToken: string;
@@ -13,7 +14,7 @@ interface AuthResponseData {
   providedIn: 'root'
 })
 export class AuthService {
-  readonly AuthServerURL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCc_RTtUgZvZKqrIvD3WRiEgExOX-mNdqU';
+  private readonly AuthServerURL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCc_RTtUgZvZKqrIvD3WRiEgExOX-mNdqU';
   constructor(private httpClient: HttpClient) { }
 
   signup(email: string, password: string) {
@@ -21,6 +22,6 @@ export class AuthService {
       email: email,
       password: password,
       returnSecureToken: true
-    })
+    });
   }
 }
