@@ -72,18 +72,39 @@ export class AuthService {
     this.router.navigate(['/auth']);
   }
 
-  private buildServiceUrl(url: string) {
-    return url + '?key=' + this.API_KEY;
+  autoLogin() {
+    const userData: {
+      email: string;
+      id: string;
+      _token: string;
+      _tokenExpirationDate: string;
+    } = JSON.parse(localStorage.getItem('authenticatedUser'));
+    if (!userData) {
+      return;
+    }
+    const loadedUser = new User(
+      userData.email,
+      userData.id,
+      userData._token,
+      new Date(userData._tokenExpirationDate));
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+    }
   }
 
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number, ) {
-    const expirationDate = new Date(new Date().getTime() + expiresIn);
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email,
       userId,
       token,
       expirationDate
     );
     this.user.next(user);
+    localStorage.setItem('authenticatedUser', JSON.stringify(user));
+  }
+
+  private buildServiceUrl(url: string) {
+    return url + '?key=' + this.API_KEY;
   }
 
   private handleError(errorRes: HttpErrorResponse) {
