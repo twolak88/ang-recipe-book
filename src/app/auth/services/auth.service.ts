@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { User } from '../user.model';
 
 export interface AuthResponseData {
   kind: string;
@@ -20,6 +21,8 @@ export class AuthService {
   private readonly API_KEY: string = 'AIzaSyCc_RTtUgZvZKqrIvD3WRiEgExOX-mNdqU'
   private readonly SignupAuthServerURL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
   private readonly LoginAuthServerURL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword'
+  user = new Subject<User>();
+
   constructor(private httpClient: HttpClient) { }
 
   signup(email: string, password: string) {
@@ -28,7 +31,17 @@ export class AuthService {
       password: password,
       returnSecureToken: true
     }).pipe(
-      catchError(this.handleError)
+      catchError(this.handleError),
+      tap(
+        resData => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        }
+      )
     );
   }
 
@@ -38,12 +51,32 @@ export class AuthService {
       password: password,
       returnSecureToken: true
     }).pipe(
-      catchError(this.handleError)
+      catchError(this.handleError),
+      tap(
+        resData => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        }
+      )
     );
   }
 
   private buildServiceUrl(url: string) {
     return url + '?key=' + this.API_KEY;
+  }
+
+  private handleAuthentication(email: string, userId: string, token: string, expiresIn: number, ) {
+    const expirationDate = new Date(new Date().getTime() + expiresIn);
+    const user = new User(email,
+      userId,
+      token,
+      expirationDate
+    );
+    this.user.next(user);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
