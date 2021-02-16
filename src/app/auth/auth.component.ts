@@ -1,25 +1,35 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 import { AuthService, AuthResponseData } from './services/auth.service';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent implements OnInit {
-  @ViewChild('authForm') authForm: NgForm;
+  @ViewChild('authForm', {static: false}) authForm: NgForm;
+  @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
   isLoginMode = true;
   isLoading = false;
-  error = null;
+  // error = null;
 
-  constructor(private authService: AuthService,
-    private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmit() {
     if (!this.authForm.valid) {
@@ -36,13 +46,15 @@ export class AuthComponent implements OnInit {
       authObservable = this.authService.signup(email, password);
     }
     authObservable.subscribe(
-      responseData => {
+      (responseData) => {
         console.log(responseData);
         this.isLoading = false;
         this.router.navigate(['/']);
-      }, errorMessage => {
+      },
+      (errorMessage) => {
         console.log(errorMessage);
-        this.error = errorMessage;
+        // this.error = errorMessage;
+        this.showErrorAlert(errorMessage);
         this.isLoading = false;
       }
     );
@@ -54,7 +66,17 @@ export class AuthComponent implements OnInit {
     this.isLoginMode = !this.isLoginMode;
   }
 
-  onHandleError() {
-    this.error = null;
+  // onHandleError() {
+  //   this.error = null;
+  // }
+
+  private showErrorAlert(message: string) {
+    // const alertComponent = new AlertComponent(); // use  factory
+    const alertComponentFactory = this.componentFactoryResolver.resolveComponentFactory(
+      AlertComponent
+    );
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+    hostViewContainerRef.clear();
+    hostViewContainerRef.createComponent(alertComponentFactory);
   }
 }

@@ -5,15 +5,18 @@
       style="text-align: center;">
       <app-loading-spinner></app-loading-spinner>
     </div>
+
     <!-- <div
       class="alert alert-danger"
       *ngIf="error">
       <p>{{ error }}</p>
     </div> -->
-    <app-alert
+    <!--<app-alert
       [message]="error"
       *ngIf="error"
-      (close)="onHandleError()"></app-alert><!-- recomended approach -->
+      (close)="onHandleError()"></app-alert> //recomended approach -->
+    <ng-template appPlaceholder></ng-template>
+
     <form
       #authForm="ngForm"
       (ngSubmit)="onSubmit()"
