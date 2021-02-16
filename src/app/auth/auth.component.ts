@@ -22,7 +22,6 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit() {
-    this.error = null;
     if (!this.authForm.valid) {
       return;
     }
@@ -53,5 +52,9 @@ export class AuthComponent implements OnInit {
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  onHandleError() {
+    this.error = null;
   }
 }
