@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseAPIKey: 'AIzaSyCc_RTtUgZvZKqrIvD3WRiEgExOX-mNdqU',
+  dataStorageServiceAPI_URL: 'https://ang-recipe-book-b5e33-default-rtdb.firebaseio.com/'
 };
 
 /*

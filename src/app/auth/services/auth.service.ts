@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, throwError, TimeoutError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from '../user.model';
+import { environment } from '../../../environments/environment';
 
 export interface AuthResponseData {
   kind: string;
@@ -19,7 +20,7 @@ export interface AuthResponseData {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_KEY: string = 'AIzaSyCc_RTtUgZvZKqrIvD3WRiEgExOX-mNdqU'
+  private readonly API_KEY: string = environment.firebaseAPIKey;
   private readonly SignupAuthServerURL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
   private readonly LoginAuthServerURL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword'
   private readonly LocalStorageAuthUserKey: string = 'authenticatedUser';

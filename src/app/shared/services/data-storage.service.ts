@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { map, tap } from 'rxjs/operators'
 import { Recipe } from 'src/app/recipes/recipe.model';
 import { RecipeService } from 'src/app/recipes/services/recipe.service';
+import { environment } from '../../../environments/environment'
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataStorageService {
-  readonly Service_URL = 'https://ang-recipe-book-b5e33-default-rtdb.firebaseio.com/'
+  readonly Service_URL = environment.dataStorageServiceAPI_URL;
   constructor(private httpClient: HttpClient,
     private recipeService: RecipeService) { }
 
