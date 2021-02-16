@@ -18,6 +18,10 @@ export class RecipeEditComponent implements OnInit {
     private recipeService: RecipeService,
     private router: Router) { }
 
+  get controls() {
+    return (this.recipeForm.get('ingredients') as FormArray).controls;
+  }
+
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(
       (params: Params) => {
@@ -64,10 +68,6 @@ export class RecipeEditComponent implements OnInit {
     if (confirm("Are you sure to cancel editing recipe?")) {
       this.router.navigate(['../'], {relativeTo: this.activatedRoute});
     }
-  }
-
-  get controls() {
-    return (<FormArray>this.recipeForm.get('ingredients')).controls;
   }
 
   private initForm() {
