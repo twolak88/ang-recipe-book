@@ -4,6 +4,7 @@ import { AlertComponent } from './alert/alert.component';
 import { LoadingSpinnerComponent } from './loading-spinners/loading-spinner/loading-spinner.component';
 import { PlaceholderDirective } from './placeholder/placeholder.directive';
 import { DropdownDirective } from './dropdown.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { DropdownDirective } from './dropdown.directive';
     DropdownDirective
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    HttpClientModule
   ],
   exports: [
     LoadingSpinnerComponent,
