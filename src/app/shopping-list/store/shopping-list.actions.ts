@@ -46,4 +46,4 @@ export type ShoppingListActions =
   | UpdateIngredient
   | DeleteIngredient
   | StartEdit
-  | StopEdit
+  | StopEdit;
