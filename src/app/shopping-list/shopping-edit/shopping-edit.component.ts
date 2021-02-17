@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { ShoppingListService } from '../services/shopping-list.service';
-import { AddIngredient } from '../store/shopping-list.actions';
+import { AddIngredient, DeleteIngredient, UpdateIngredient } from '../store/shopping-list.actions';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -44,7 +44,13 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     const value = this.form.value;
     const newIngredient = new Ingredient(value.name, value.amount);
     if(this.editMode) {
-      this.shoppingListService.updateIngredient(this.editedItemIndex, newIngredient);
+      // this.shoppingListService.updateIngredient(this.editedItemIndex, newIngredient);
+      this.store.dispatch(
+        new UpdateIngredient({
+          index: this.editedItemIndex,
+          ingredient: newIngredient
+        })
+      );
     } else {
       // this.shoppingListService.addIngredient(newIngredient);
       this.store.dispatch(new AddIngredient(newIngredient));
@@ -58,7 +64,8 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   onDelete() {
     if (confirm('Are you sure you want to delete ingredient?')) {
-      this.shoppingListService.deleteIngredient(this.editedItemIndex);
+      // this.shoppingListService.deleteIngredient(this.editedItemIndex);
+      this.store.dispatch(new DeleteIngredient(this.editedItemIndex));
       this.reset();
     }
   }
