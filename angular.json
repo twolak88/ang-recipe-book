@@ -121,5 +121,8 @@
       }
     }
   },
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  },
   "defaultProject": "ang-recipe-book"
 }
