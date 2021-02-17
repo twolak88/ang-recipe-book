@@ -32,8 +32,7 @@ export class RecipeService {
   private recipes: Recipe[] = [];
   recipeChanged = new Subject<Recipe[]>();
 
-  constructor(/*private shoppingListService: ShoppingListService,*/
-    private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>) { }
 
   getRecipe(id: number) {
     return this.recipes.find(
@@ -73,7 +72,6 @@ export class RecipeService {
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    // this.shoppingListService.addIngredients(ingredients);
     this.store.dispatch(new AddIngredients(ingredients));
   }
 
