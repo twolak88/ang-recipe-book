@@ -1,13 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from '../user.model';
 import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.reducer';
-import { Login, Logout } from '../store/auth.actions';
+import * as AuthActions from '../store/auth.actions';
 
 export interface AuthResponseData {
   kind: string;
@@ -74,7 +74,7 @@ export class AuthService {
   }
 
   logout() {
-    this.store.dispatch(new Logout());
+    this.store.dispatch(new AuthActions.Logout());
     this.router.navigate(['/auth']);
     localStorage.removeItem(this.LocalStorageAuthUserKey);
     if (this.tokenExpirationTimer) {
@@ -100,7 +100,7 @@ export class AuthService {
       userData._token,
       expirationDate);
     if (loadedUser.token) {
-      this.store.dispatch(new Login({
+      this.store.dispatch(new AuthActions.AuthenticateSuccess({
         email: loadedUser.email,
         userId: loadedUser.userId,
         token: loadedUser.token,
@@ -125,7 +125,7 @@ export class AuthService {
       token,
       expirationDate
     );
-    this.store.dispatch(new Login({
+    this.store.dispatch(new AuthActions.AuthenticateSuccess({
       email: user.email,
       userId: user.userId,
       token: user.token,
