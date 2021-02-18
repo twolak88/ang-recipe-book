@@ -8,6 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { appReducer } from './store/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,9 @@ import { appReducer } from './store/app.reducer';
   imports: [
     BrowserModule,
     StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot([
+      AuthEffects
+    ]),
     AppRoutingModule,
     SharedModule,
     CoreModule
