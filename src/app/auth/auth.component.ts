@@ -26,7 +26,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   private alertCloseSubscription: Subscription;
   isLoginMode = true;
   isLoading = false;
-  // error = null;
+  error = null;
 
   constructor(
     private authService: AuthService,
@@ -35,7 +35,12 @@ export class AuthComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store.select('auth').subscribe(authState => {
+      this.isLoading = authState.loading;
+      this.error = authState.authError;
+    })
+  }
 
   ngOnDestroy(): void {
     if(this.alertCloseSubscription) {
@@ -62,19 +67,20 @@ export class AuthComponent implements OnInit, OnDestroy {
     } else {
       authObservable = this.authService.signup(email, password);
     }
-    authObservable.subscribe(
-      (responseData) => {
-        console.log(responseData);
-        this.isLoading = false;
-        this.router.navigate(['/']);
-      },
-      (errorMessage) => {
-        console.log(errorMessage);
-        // this.error = errorMessage;
-        this.showErrorAlert(errorMessage);
-        this.isLoading = false;
-      }
-    );
+
+    // authObservable.subscribe(
+    //   (responseData) => {
+    //     console.log(responseData);
+    //     this.isLoading = false;
+    //     this.router.navigate(['/']);
+    //   },
+    //   (errorMessage) => {
+    //     console.log(errorMessage);
+    //     // this.error = errorMessage;
+    //     this.showErrorAlert(errorMessage);
+    //     this.isLoading = false;
+    //   }
+    // );
 
     this.authForm.reset();
   }
