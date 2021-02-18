@@ -33,49 +33,49 @@ export class AuthService {
     private router: Router,
     private store: Store<AppState>) { }
 
-  signup(email: string, password: string) {
-    return this.httpClient.post<AuthResponseData>(this.buildServiceUrl(this.SignupAuthServerURL), {
-      email: email,
-      password: password,
-      returnSecureToken: true
-    }).pipe(
-      catchError(this.handleError),
-      tap(
-        resData => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
-        }
-      )
-    );
-  }
+  // signup(email: string, password: string) {
+  //   return this.httpClient.post<AuthResponseData>(this.buildServiceUrl(this.SignupAuthServerURL), {
+  //     email: email,
+  //     password: password,
+  //     returnSecureToken: true
+  //   }).pipe(
+  //     catchError(this.handleError),
+  //     tap(
+  //       resData => {
+  //         this.handleAuthentication(
+  //           resData.email,
+  //           resData.localId,
+  //           resData.idToken,
+  //           +resData.expiresIn
+  //         );
+  //       }
+  //     )
+  //   );
+  // }
 
-  login(email: string, password: string) {
-    return this.httpClient.post<AuthResponseData>(this.buildServiceUrl(this.LoginAuthServerURL), {
-      email: email,
-      password: password,
-      returnSecureToken: true
-    }).pipe(
-      catchError(this.handleError),
-      tap(
-        resData => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
-        }
-      )
-    );
-  }
+  // login(email: string, password: string) {
+  //   return this.httpClient.post<AuthResponseData>(this.buildServiceUrl(this.LoginAuthServerURL), {
+  //     email: email,
+  //     password: password,
+  //     returnSecureToken: true
+  //   }).pipe(
+  //     catchError(this.handleError),
+  //     tap(
+  //       resData => {
+  //         this.handleAuthentication(
+  //           resData.email,
+  //           resData.localId,
+  //           resData.idToken,
+  //           +resData.expiresIn
+  //         );
+  //       }
+  //     )
+  //   );
+  // }
 
   logout() {
     this.store.dispatch(new AuthActions.Logout());
-    this.router.navigate(['/auth']);
+    // this.router.navigate(['/auth']);
     localStorage.removeItem(this.LocalStorageAuthUserKey);
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
@@ -118,46 +118,46 @@ export class AuthService {
     }, expirationDuration);
   }
 
-  private handleAuthentication(email: string, userId: string, token: string, expiresIn: number, ) {
-    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-    const user = new User(email,
-      userId,
-      token,
-      expirationDate
-    );
-    this.store.dispatch(new AuthActions.AuthenticateSuccess({
-      email: user.email,
-      userId: user.userId,
-      token: user.token,
-      expirationDate: expirationDate
-    }));
-    this.autoLogout(expiresIn * 1000);
-    localStorage.setItem(this.LocalStorageAuthUserKey, JSON.stringify(user));
-  }
+  // private handleAuthentication(email: string, userId: string, token: string, expiresIn: number, ) {
+  //   const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+  //   const user = new User(email,
+  //     userId,
+  //     token,
+  //     expirationDate
+  //   );
+  //   this.store.dispatch(new AuthActions.AuthenticateSuccess({
+  //     email: user.email,
+  //     userId: user.userId,
+  //     token: user.token,
+  //     expirationDate: expirationDate
+  //   }));
+  //   this.autoLogout(expiresIn * 1000);
+  //   localStorage.setItem(this.LocalStorageAuthUserKey, JSON.stringify(user));
+  // }
 
-  private buildServiceUrl(url: string) {
-    return url + '?key=' + this.API_KEY;
-  }
+  // private buildServiceUrl(url: string) {
+  //   return url + '?key=' + this.API_KEY;
+  // }
 
-  private handleError(errorRes: HttpErrorResponse) {
-    if(!errorRes.error || !errorRes.error.error) {
-      return throwError('An unknown error occured: ' + errorRes.message)
-    }
-    switch(errorRes.error.error.message) {
-      case 'EMAIL_EXISTS':
-        return throwError('The email address is already in use by another account.');
-      case 'OPERATION_NOT_ALLOWED':
-        return throwError('Password sign-in is disabled for this project.');
-      case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-        return throwError('We have blocked all requests from this device due to unusual activity. Try again later.');
-      case 'EMAIL_NOT_FOUND':
-        return throwError('There is no user record corresponding to this identifier.');
-      case 'INVALID_PASSWORD':
-        return throwError('The password is invalid or the user does not have a password.');
-      case 'USER_DISABLED':
-        return throwError('The user account has been disabled by an administrator.');
-      default:
-        return throwError('An unknown error occured: ' + errorRes.message);
-    }
-  }
+  // private handleError(errorRes: HttpErrorResponse) {
+  //   if(!errorRes.error || !errorRes.error.error) {
+  //     return throwError('An unknown error occured: ' + errorRes.message)
+  //   }
+  //   switch(errorRes.error.error.message) {
+  //     case 'EMAIL_EXISTS':
+  //       return throwError('The email address is already in use by another account.');
+  //     case 'OPERATION_NOT_ALLOWED':
+  //       return throwError('Password sign-in is disabled for this project.');
+  //     case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+  //       return throwError('We have blocked all requests from this device due to unusual activity. Try again later.');
+  //     case 'EMAIL_NOT_FOUND':
+  //       return throwError('There is no user record corresponding to this identifier.');
+  //     case 'INVALID_PASSWORD':
+  //       return throwError('The password is invalid or the user does not have a password.');
+  //     case 'USER_DISABLED':
+  //       return throwError('The user account has been disabled by an administrator.');
+  //     default:
+  //       return throwError('An unknown error occured: ' + errorRes.message);
+  //   }
+  // }
 }
