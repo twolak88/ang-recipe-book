@@ -21,9 +21,11 @@ export function recipeReducer(
         recipes: [...action.payload]
       };
     case RecipesActions.ADD_RECIPE:
+      const recipe = {...action.payload};
+      recipe.id = state.recipes.length + 1;
       return {
         ...state,
-        recipes: [...state.recipes, action.payload]
+        recipes: [...state.recipes, recipe]
       };
     case RecipesActions.UPDATE_RECIPE:
       const index = state.recipes.findIndex(
