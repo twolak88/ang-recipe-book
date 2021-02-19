@@ -5,7 +5,12 @@
 export const environment = {
   production: false,
   firebaseAPIKey: 'AIzaSyCc_RTtUgZvZKqrIvD3WRiEgExOX-mNdqU',
-  dataStorageServiceAPI_URL: 'https://ang-recipe-book-b5e33-default-rtdb.firebaseio.com/'
+  apiKeyParam: '?key=',
+  dataStorageServiceAPI_URL: 'https://ang-recipe-book-b5e33-default-rtdb.firebaseio.com/',
+  loginAuthServerURL: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword',
+  signupAuthServerURL: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp',
+  localStorageAuthUserKey: 'authenticatedUser'
+
 };
 
 /*

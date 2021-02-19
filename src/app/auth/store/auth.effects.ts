@@ -20,7 +20,7 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
-const localStorageAuthUserKey: string = 'authenticatedUser';
+const localStorageAuthUserKey: string = environment.localStorageAuthUserKey;
 const handleAuthentication = (
   expiresIn: number,
   email: string,
@@ -66,11 +66,9 @@ const handleErrorMessage = (errorRes) => {
 
 @Injectable()
 export class AuthEffects {
-  private readonly API_KEY: string = environment.firebaseAPIKey;
-  private readonly LoginAuthServerURL: string =
-    'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
-  private readonly SignupAuthServerURL: string =
-    'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
+  private readonly API_KEY_PARAM: string = environment.apiKeyParam + environment.firebaseAPIKey;
+  private readonly LoginAuthServerURL: string = environment.loginAuthServerURL + this.API_KEY_PARAM;
+  private readonly SignupAuthServerURL: string = environment.signupAuthServerURL + this.API_KEY_PARAM;
 
   constructor(
     private actions$: Actions,
@@ -85,7 +83,7 @@ export class AuthEffects {
       switchMap((signupAction: AuthActions.SignupStart) =>
         this.httpClient
           .post<AuthResponseData>(
-            this.buildServiceUrl(this.SignupAuthServerURL),
+            this.SignupAuthServerURL,
             {
               email: signupAction.payload.email,
               password: signupAction.payload.password,
@@ -116,7 +114,7 @@ export class AuthEffects {
       switchMap((authData: AuthActions.LoginStart) =>
         this.httpClient
           .post<AuthResponseData>(
-            this.buildServiceUrl(this.LoginAuthServerURL),
+            this.LoginAuthServerURL,
             {
               email: authData.payload.email,
               password: authData.payload.password,
@@ -199,8 +197,4 @@ export class AuthEffects {
     ),
     { dispatch: false }
   );
-
-  private buildServiceUrl(url: string) {
-    return url + '?key=' + this.API_KEY;
-  }
 }
