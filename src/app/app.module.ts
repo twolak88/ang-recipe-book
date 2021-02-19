@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { StoreRouterConnectingModule } from '@ngrx/router-store'
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -25,6 +26,7 @@ import { environment } from '../environments/environment';
       AuthEffects
     ]),
     StoreDevtoolsModule.instrument({logOnly: environment.production}),
+    StoreRouterConnectingModule.forRoot(),
     AppRoutingModule,
     SharedModule,
     CoreModule
