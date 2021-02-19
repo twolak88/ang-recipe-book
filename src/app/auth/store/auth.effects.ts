@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import * as AuthActions from './auth.actions';
 import { User } from '../user.model';
+import { AuthService } from '../services/auth.service';
 
 export interface AuthResponseData {
   kind: string;
@@ -74,7 +75,8 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private httpClient: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   authSignup = createEffect(() =>
@@ -91,6 +93,9 @@ export class AuthEffects {
             }
           )
           .pipe(
+            tap(resData => {
+              this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+            }),
             map((resData) =>
               handleAuthentication(
                 +resData.expiresIn,
@@ -119,6 +124,9 @@ export class AuthEffects {
             }
           )
           .pipe(
+            tap(resData => {
+              this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+            }),
             map((resData) =>
               handleAuthentication(
                 +resData.expiresIn,
@@ -164,15 +172,15 @@ export class AuthEffects {
             userData._token,
             new Date(userData._tokenExpirationDate));
           if (loadedUser.token) {
+            const expirationDuration =
+              new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+            this.authService.setLogoutTimer(+expirationDuration);
             return new AuthActions.AuthenticateSuccess({
               email: loadedUser.email,
               userId: loadedUser.userId,
               token: loadedUser.token,
               expirationDate: new Date(userData._tokenExpirationDate)
             });
-            // const expirationDuration =
-            //   new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
-            // this.autoLogout(expirationDuration);
           } else {
             return { type: 'DUMMY' };
           }
@@ -184,8 +192,9 @@ export class AuthEffects {
     () => this.actions$.pipe(
       ofType(AuthActions.LOGOUT),
       tap(() => {
-        this.router.navigate(['/auth']);
+        this.authService.clearLogoutTimer();
         localStorage.removeItem(localStorageAuthUserKey);
+        this.router.navigate(['/auth']);
       })
     ),
     { dispatch: false }
