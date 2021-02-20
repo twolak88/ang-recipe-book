@@ -1,14 +1,14 @@
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import * as AuthActions from './auth.actions';
 import { User } from '../user.model';
 import { AuthService } from '../services/auth.service';
+import * as AuthActions from './auth.actions';
 
 export interface AuthResponseData {
   kind: string;
