@@ -7,7 +7,11 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "dev:ssr": "ng run ang-recipe-book:serve-ssr",
+    "serve:ssr": "node dist/ang-recipe-book/server/main.js",
+    "build:ssr": "ng build --prod && ng run ang-recipe-book:server:production",
+    "prerender": "ng run ang-recipe-book:prerender"
   },
   "private": true,
   "dependencies": {
@@ -18,11 +22,14 @@
     "@angular/forms": "~11.1.1",
     "@angular/platform-browser": "~11.1.1",
     "@angular/platform-browser-dynamic": "~11.1.1",
+    "@angular/platform-server": "~11.1.1",
     "@angular/router": "~11.1.1",
     "@ngrx/effects": "^11.0.1",
     "@ngrx/router-store": "^11.0.1",
     "@ngrx/store": "^11.0.1",
+    "@nguniversal/express-engine": "^11.1.2",
     "bootstrap": "^3.4.1",
+    "express": "^4.15.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
@@ -33,6 +40,8 @@
     "@angular/compiler-cli": "~11.1.1",
     "@ngrx/schematics": "^11.0.1",
     "@ngrx/store-devtools": "^11.0.1",
+    "@nguniversal/builders": "^11.1.2",
+    "@types/express": "^4.17.0",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
